@@ -1,11 +1,11 @@
 """Unit tests for Spec plugin.
 """
 
+import textwrap
 import unittest
 import nose
 from nose.plugins import Plugin, PluginTester
-from pinocchio.spec import Spec
-
+from pinocchio.spec import Spec, in_color
 
 def prepend_in_each_line(string, prefix='    '):
     return ''.join([prefix + s for s in string.splitlines(True)])
@@ -82,6 +82,8 @@ class TestPluginSpecWithDocstringSpecNames(SpecPluginTestCase):
 """
     expected_test_docstring_spec_class_names_output = """Yet another class
 - has a nice descriptions inside test methods
+- Has a multiline documentation
+like so.
 - has a lot of methods
 """
 
@@ -136,3 +138,22 @@ class TestPluginSpecWithDoctestsButDisabled(SpecPluginTestCase):
     def test_doesnt_build_specifications_for_doctests_when_spec_doctests_option_wasnt_set(self):
         self.failIfContainsInOutput("test_doctests")
         self.failIfContainsInOutput("2 + 3 returns 5")
+
+class TestColor(object):
+    def setup(self):
+        self.single_line = "Here is a single line of text."
+        self.multi_line = textwrap.dedent( """\
+                             Here is some text
+                             That is on multiple lines
+                             three lines to be exact."""
+                          )
+
+    def test_color_one_line(self):
+        assert in_color('green', self.single_line) == '\x1b[1;32mHere is a single line of text.\x1b[1;0m'
+
+    def test_color_multiple_lines(self):
+        expected = textwrap.dedent('''\
+                       \x1b[1;32mHere is some text
+                       \x1b[1;0m\x1b[1;32mThat is on multiple lines
+                       \x1b[1;0m\x1b[1;32mthree lines to be exact.\x1b[1;0m''')
+        assert in_color('green', self.multi_line) == expected

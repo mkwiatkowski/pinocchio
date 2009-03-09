@@ -10,3 +10,9 @@ class TestYetAnotherClass:
     def test_foobared(self):
         "has a nice descriptions inside test methods"
         pass
+
+    def test_foobaree(self):
+        """Has a multiline documentation
+           like so.
+        """
+        pass

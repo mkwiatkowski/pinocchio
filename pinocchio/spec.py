@@ -87,6 +87,7 @@ cases will be shown in yellow. You need an ANSI terminal to use this.
 """
 
 import doctest
+import inspect
 import os
 import re
 import types
@@ -178,16 +179,16 @@ def camelcase2spec(name):
     return camel2word(remove_leading_and_trailing('Test', name))
 
 def camelcaseDescription(object):
-    return object.__doc__ or camelcase2spec(object.__name__)
+    return inspect.getdoc(object) or camelcase2spec(object.__name__)
 
 def underscoredDescription(object):
-    return object.__doc__ or underscored2spec(object.__name__).capitalize()
+    return inspect.getdoc(object) or underscored2spec(object.__name__).capitalize()
 
 def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
-    return test.method.__doc__ or underscored2spec(test.method.__name__)
+    return inspect.getdoc(test.method) or underscored2spec(test.method.__name__)
 
 def unittestMethodDescription(test):
     return test._testMethodDoc or underscored2spec(test._testMethodName)
@@ -305,7 +306,12 @@ class SpecOutputStream(OutputStream):
 color_end = "\x1b[1;0m"
 colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;33m")
 
-def in_color(color, text): return "%s%s%s" % (colors[color], text, color_end)
+def in_color(color, text): 
+    """Colorize text, adding color to each line so that the color shows up
+    correctly with the less -R as well as more and normal shell.
+    """
+    return "".join( "%s%s%s" % (colors[color], line, color_end) 
+                                       for line in text.splitlines(True))
 
 ################################################################################
 ## Plugin itself.
