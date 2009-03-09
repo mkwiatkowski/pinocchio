@@ -1,0 +1,6 @@
+*.py[co]
+build
+dist
+pinocchio.egg-info
+.nose-stopwatch-times
+
