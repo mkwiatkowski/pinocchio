@@ -12,7 +12,7 @@ import pkg_resources
 try:
     pkg_resources.require('figleaf>=0.6.1')
     import figleaf
-except ImportError:
+except (ImportError, pkg_resources.DistributionNotFound):
     figleaf = None
 
 import sys
