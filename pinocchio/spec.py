@@ -178,20 +178,31 @@ def underscored2spec(name):
 def camelcase2spec(name):
     return camel2word(remove_leading_and_trailing('Test', name))
 
+def testName(object, dflt=None):
+    if hasattr(object, "__testname__"):
+        return object.__testname__
+    else:
+        if dflt:
+            v = dflt
+        else:
+            v = object.__name__
+        return underscored2spec(v)
+        
 def camelcaseDescription(object):
-    return inspect.getdoc(object) or camelcase2spec(object.__name__)
+    return inspect.getdoc(object) or testName(object)
 
 def underscoredDescription(object):
-    return inspect.getdoc(object) or underscored2spec(object.__name__).capitalize()
+    return inspect.getdoc(object) or testName(object)
 
 def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
-    return inspect.getdoc(test.method) or underscored2spec(test.method.__name__)
+    return inspect.getdoc(test.method) or testName(test.method)
 
 def unittestMethodDescription(test):
-    return test._testMethodDoc or underscored2spec(test._testMethodName)
+    testMethod = getattr(test, test._testMethodName)
+    return test._testMethodDoc or testName(testMethod, test._testMethodName)
 
 def noseFunctionDescription(test):
     # Special case for test generators.
