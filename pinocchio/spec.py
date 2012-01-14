@@ -192,7 +192,7 @@ def camelcaseDescription(object):
     return inspect.getdoc(object) or testName(object, cleaner=camelcase2spec)
 
 def underscoredDescription(object):
-    return inspect.getdoc(object) or testName(object)
+    return inspect.getdoc(object) or testName(object).capitalize()
 
 def doctestContextDescription(doctest):
     return doctest._dt_test.name
@@ -306,7 +306,7 @@ class SpecOutputStream(OutputStream):
 
     def _print_spec(self, colorized, spec, status=None):
         if status:
-            self.print_line(colorized("- |%-10s| %s" % (status, spec)))
+            self.print_line(colorized("- %s (%s)" % (spec, status)))
         else:
             self.print_line(colorized("- %s" % spec))
 
@@ -315,7 +315,7 @@ class SpecOutputStream(OutputStream):
 ################################################################################
 
 color_end = "\x1b[1;0m"
-colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;34m")
+colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;33m")
 
 def in_color(color, text): 
     """Colorize text, adding color to each line so that the color shows up
@@ -375,7 +375,7 @@ class Spec(Plugin):
         self.stream.off()
 
     def addSuccess(self, test):
-        self._print_spec('green', test, "PASS")
+        self._print_spec('green', test)
 
     def addFailure(self, test, err):
         self._print_spec('red', test, 'FAILED')
