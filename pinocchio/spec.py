@@ -178,20 +178,31 @@ def underscored2spec(name):
 def camelcase2spec(name):
     return camel2word(remove_leading_and_trailing('Test', name))
 
+def testName(object, cleaner=underscored2spec, dflt=None):
+    if hasattr(object, "__testname__"):
+        return object.__testname__
+    else:
+        if dflt:
+            v = dflt
+        else:
+            v = object.__name__
+        return cleaner(v)
+        
 def camelcaseDescription(object):
-    return inspect.getdoc(object) or camelcase2spec(object.__name__)
+    return inspect.getdoc(object) or testName(object, cleaner=camelcase2spec)
 
 def underscoredDescription(object):
-    return inspect.getdoc(object) or underscored2spec(object.__name__).capitalize()
+    return inspect.getdoc(object) or testName(object)
 
 def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
-    return inspect.getdoc(test.method) or underscored2spec(test.method.__name__)
+    return inspect.getdoc(test.method) or testName(test.method)
 
 def unittestMethodDescription(test):
-    return test._testMethodDoc or underscored2spec(test._testMethodName)
+    testMethod = getattr(test, test._testMethodName)
+    return test._testMethodDoc or testName(testMethod, dflt=test._testMethodName)
 
 def noseFunctionDescription(test):
     # Special case for test generators.
@@ -295,7 +306,7 @@ class SpecOutputStream(OutputStream):
 
     def _print_spec(self, colorized, spec, status=None):
         if status:
-            self.print_line(colorized("- %s (%s)" % (spec, status)))
+            self.print_line(colorized("- |%-10s| %s" % (status, spec)))
         else:
             self.print_line(colorized("- %s" % spec))
 
@@ -304,7 +315,7 @@ class SpecOutputStream(OutputStream):
 ################################################################################
 
 color_end = "\x1b[1;0m"
-colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;33m")
+colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;34m")
 
 def in_color(color, text): 
     """Colorize text, adding color to each line so that the color shows up
@@ -364,7 +375,7 @@ class Spec(Plugin):
         self.stream.off()
 
     def addSuccess(self, test):
-        self._print_spec('green', test)
+        self._print_spec('green', test, "PASS")
 
     def addFailure(self, test, err):
         self._print_spec('red', test, 'FAILED')
