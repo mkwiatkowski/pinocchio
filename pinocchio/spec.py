@@ -107,7 +107,7 @@ from nose.plugins import Plugin
 
 def dispatch_on_type(dispatch_table, instance):
     for type, func in dispatch_table:
-        if type is True or isinstance(instance, type):
+        if type is True or isinstance(instance, type) or instance == type:
             return func(instance)
 
 def remove_leading(needle, haystack):
@@ -393,7 +393,7 @@ class Spec(Plugin):
             (True                , print_spec_func('red',    'ERROR')),
         ]
 
-        dispatch_on_type(supported_error_types, err[1])
+        dispatch_on_type(supported_error_types, err[0])
 
     def afterTest(self, test):
         self.stream.capture()
