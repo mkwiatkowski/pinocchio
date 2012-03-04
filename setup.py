@@ -3,8 +3,6 @@ from setuptools import setup
 setup(
     name='pinocchio',
     version="0.2",
-    download_url = 'http://darcs.idyll.org/~t/projects/pinocchio-0.2.0.tar.gz',
-
     description = 'pinocchio plugins for the nose testing framework',
     author = 'C. Titus Brown and Michal Kwiatkowski',
     author_email = 'titus@idyll.org,constant.beta@gmail.com',
