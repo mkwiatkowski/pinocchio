@@ -2,13 +2,13 @@ from setuptools import setup
 
 setup(
     name='pinocchio',
-    version="0.2",
+    version="0.3",
     description = 'pinocchio plugins for the nose testing framework',
     author = 'C. Titus Brown and Michal Kwiatkowski',
-    author_email = 'titus@idyll.org,constant.beta@gmail.com',
+    author_email = 'titus@idyll.org,michal@trivas.pl',
     license = 'MIT',
 
-    url = 'http://darcs.idyll.org/~t/projects/pinocchio/doc/',
+    url = 'https://github.com/mkwiatkowski/pinocchio',
 
     long_description = """\
 Extra plugins for the nose testing framework.  Provides tools for flexibly
