@@ -409,6 +409,8 @@ class Spec(Plugin):
         self.stream.print_context(context)
 
     def _print_spec(self, color, test, status=None):
+        if isinstance(test, nose.suite.ContextSuite):
+            return
         if isinstance(test.test, doctest.DocTestCase) and not self.spec_doctests:
             return
         self.stream.print_spec(self._colorize(color), test, status)
