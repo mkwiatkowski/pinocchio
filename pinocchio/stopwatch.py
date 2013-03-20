@@ -131,14 +131,7 @@ class Stopwatch(Plugin):
 
     def stopTest(self, test):
         """
-        stopTest: stop timing, canonicalize the test name, and save
-        the run time.
+        stopTest: stop timing, and save the run time.
         """
         runtime = time.time() - self._started
-
-        # CTB: HACK!
-        testname = str(test)
-        if ' ' in testname:
-            testname = testname.split(' ')[1]
-            
-        self.times[testname] = runtime
+        self.times[test.test.id()] = runtime
