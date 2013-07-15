@@ -29,4 +29,5 @@ specifications.
             'spec = pinocchio.spec:Spec',
             'stopwatch = pinocchio.stopwatch:Stopwatch',
         ]},
+    install_requires = ['colorama'],
 )

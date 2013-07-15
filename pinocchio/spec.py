@@ -97,6 +97,9 @@ try:
     from unittest.runner import _WritelnDecorator #python 2.7
 except ImportError:
     from unittest import _WritelnDecorator
+from sys import platform
+from colorama import init, AnsiToWin32
+init(wrap=False)
 
 import nose
 from nose.plugins import Plugin
@@ -366,7 +369,12 @@ class Spec(Plugin):
         self.current_context = None
 
     def setOutputStream(self, stream):
-        self.stream = SpecOutputStream(stream, open(os.devnull, 'w'))
+        if platform.startswith('win'):
+            on_stream = AnsiToWin32(stream).stream
+        else:
+            on_stream = stream
+        off_stream = open(os.devnull, 'w')
+        self.stream = SpecOutputStream(on_stream, off_stream)
         return self.stream
 
     def beforeTest(self, test):
