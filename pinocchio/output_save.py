@@ -30,7 +30,11 @@ def write_test_output(test, output, dirname, prefix=''):
 log = logging.getLogger(__name__)
 
 def calc_testname(test):
-    name = str(test)
+    # For errors at module-level nose passes a context instead of a test case.
+    if isinstance(test, nose.suite.ContextSuite):
+        name = test.context.__name__
+    else:
+        name = str(test)
     if ' ' in name:
         name = name.split(' ')[1]
 
