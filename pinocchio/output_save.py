@@ -84,7 +84,7 @@ class OutputSave(Plugin):
             self.save_directory = os.path.abspath(self.save_directory)
 
             try:
-                os.mkdir(self.save_directory)
+                os.makedirs(self.save_directory)
             except OSError:
                 pass
 
