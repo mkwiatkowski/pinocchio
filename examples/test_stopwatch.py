@@ -1,4 +1,5 @@
 import time
+import unittest
 
 def test_0sec():
     time.sleep(0)
@@ -14,3 +15,7 @@ def test_2sec():
 
 def nada():
     pass
+
+class MyTestClass(unittest.TestCase):
+    def test_1sec_method(self):
+        time.sleep(1)
