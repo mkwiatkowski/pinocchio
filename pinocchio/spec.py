@@ -218,7 +218,7 @@ def noseFunctionDescription(test):
         if hasattr(test.test, 'description'):
             return test.test.description
         return "holds for %s" % ', '.join(map(str, test.arg))
-    return test.test.func_doc or underscored2spec(test.test.func_name)
+    return test.test.__doc__ or underscored2spec(test.test.__name__)
 
 # Different than other similar functions, this one returns a generator
 # of specifications.
@@ -245,13 +245,18 @@ def testDescription(test):
     ]
     return dispatch_on_type(supported_test_types, test.test)
 
+class _OldClass:
+    pass
+
+_OldClassType = type(_OldClass)
+
 def contextDescription(context):
     supported_context_types = [
         (types.ModuleType    , underscoredDescription),
         (types.FunctionType  , underscoredDescription),
         (doctest.DocTestCase , doctestContextDescription),
         # Handle both old and new style classes.
-        (types.ClassType     , camelcaseDescription),
+        (_OldClassType       , camelcaseDescription),
         (type                , camelcaseDescription),
     ]
     return dispatch_on_type(supported_context_types, context)
