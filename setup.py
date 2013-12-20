@@ -17,6 +17,16 @@ runtime, doing moderately sophisticated code coverage analysis
 of your unit tests, and making your test descriptions look like
 specifications.
 """,
+    classifiers=[
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Environment :: Plugins",
+        "Topic :: Software Development :: Testing"
+    ],
 
     packages = ['pinocchio'],
     entry_points = {
