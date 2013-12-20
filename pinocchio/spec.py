@@ -206,7 +206,8 @@ def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
-    return inspect.getdoc(test.method) or testName(test.method)
+    method = getattr(test.method, '_func', test.method)
+    return inspect.getdoc(method) or testName(method)
 
 def unittestMethodDescription(test):
     testMethod = getattr(test, test._testMethodName)
