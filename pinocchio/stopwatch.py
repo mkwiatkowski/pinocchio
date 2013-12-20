@@ -5,8 +5,11 @@ Stopwatch plugin for 'nose'.
 """
 import sys
 err = sys.stderr
+try:
+    from cPickle import dump, load
+except ImportError:
+    from pickle import dump, load
 
-from cPickle import dump, load
 import time
 import logging
 import os
@@ -19,7 +22,7 @@ class Stopwatch(Plugin):
         Plugin.__init__(self)
         self.dontrun = {}
         self.times = {}
-        
+
     def add_options(self, parser, env=os.environ):
         Plugin.add_options(self, parser, env)
         parser.add_option("--faster-than",
@@ -42,7 +45,7 @@ class Stopwatch(Plugin):
         handler = logging.StreamHandler(err)
         logger.addHandler(handler)
         logger.setLevel(logging.WARNING)
-        
+
         Plugin.configure(self, options, config)
 
         ### configure stopwatch stuff: file containing times, and
@@ -87,7 +90,7 @@ class Stopwatch(Plugin):
             fp = open(filename, 'w')
             log.warning('WARNING: stopwatch cannot write to "%s"' % (self.stopwatch_file))
             log.warning('WARNING: stopwatch is using "%s" to save times' % (filename,))
-            
+
         dump(self.times, fp)
         fp.close()
 
@@ -122,7 +125,7 @@ class Stopwatch(Plugin):
             return False
 
         return None
-        
+
     def startTest(self, test):
         """
         startTest: start timing.

@@ -92,7 +92,9 @@ import os
 import re
 import types
 import unittest
-from StringIO import StringIO
+
+from io import StringIO
+
 try:
     from unittest.runner import _WritelnDecorator #python 2.7
 except ImportError:
@@ -193,7 +195,7 @@ def testName(object, cleaner=underscored2spec, dflt=None):
         else:
             v = object.__name__
         return cleaner(v)
-        
+
 def camelcaseDescription(object):
     return inspect.getdoc(object) or testName(object, cleaner=camelcase2spec)
 
@@ -323,11 +325,11 @@ class SpecOutputStream(OutputStream):
 color_end = "\x1b[1;0m"
 colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;33m")
 
-def in_color(color, text): 
+def in_color(color, text):
     """Colorize text, adding color to each line so that the color shows up
     correctly with the less -R as well as more and normal shell.
     """
-    return "".join( "%s%s%s" % (colors[color], line, color_end) 
+    return "".join( "%s%s%s" % (colors[color], line, color_end)
                                        for line in text.splitlines(True))
 
 ################################################################################

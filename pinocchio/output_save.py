@@ -12,8 +12,10 @@ import nose.case
 import logging
 import os
 from nose.plugins.base import Plugin
-from StringIO import StringIO as p_StringO
-from cStringIO import OutputType as c_StringO
+
+from io import StringIO as p_StringO
+from io import OutputType as c_StringO
+
 import traceback
 
 def write_test_output(test, output, dirname, prefix=''):
@@ -22,7 +24,7 @@ def write_test_output(test, output, dirname, prefix=''):
     filename = '%s%s.txt' % (prefix, testname,)
     if dirname:
         filename = os.path.join(dirname, filename)
-        
+
     fp = open(filename, 'w')
     fp.write(output)
     fp.close()
@@ -97,7 +99,7 @@ class OutputSave(Plugin):
             capt = exception_text
         else:
             capt += exception_text
-        
+
         write_test_output(test, capt, self.save_directory, prefix='error-')
 
     def addFailure(self, test, err):
