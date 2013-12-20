@@ -73,7 +73,7 @@ class Stopwatch(Plugin):
 
         faster_than = self.faster_than
         if faster_than is not None:
-            for (k, v) in self.times.items():
+            for (k, v) in list(self.times.items()):
                 if v > faster_than:
                     self.dontrun[k] = 1
 
@@ -99,7 +99,7 @@ class Stopwatch(Plugin):
         Do we want to run this method?  See _should_run.
         """
         fullname = '%s.%s.%s' % (method.__module__,
-                                 method.im_class.__name__,
+                                 method.__self__.__class__.__name__,
                                  method.__name__)
 
         return self._should_run(fullname)
@@ -121,7 +121,7 @@ class Stopwatch(Plugin):
         If we have this test listed as "don't run" because of explicit
         time constraints, don't run it.  Otherwise, indicate no preference.
         """
-        if self.dontrun.has_key(name):
+        if name in self.dontrun:
             return False
 
         return None
