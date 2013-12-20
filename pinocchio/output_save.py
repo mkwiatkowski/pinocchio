@@ -14,7 +14,6 @@ import os
 from nose.plugins.base import Plugin
 
 from io import StringIO as p_StringO
-from io import OutputType as c_StringO
 
 import traceback
 
@@ -39,8 +38,7 @@ def calc_testname(test):
     return name
 
 def get_stdout():
-    if isinstance(sys.stdout, c_StringO) or \
-           isinstance(sys.stdout, p_StringO):
+    if isinstance(sys.stdout, p_StringO):
         return sys.stdout.getvalue()
     return None
 
