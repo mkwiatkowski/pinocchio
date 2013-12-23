@@ -1,8 +1,8 @@
 def setup():
-    print 'howdy'
+    print('howdy')
 
 def teardown():
-    print 'bye!'
+    print('bye!')
 
 def test_one():
     assert 1 == 1
@@ -10,7 +10,7 @@ def test_one():
 class TestTwo:
     def setup(self):
         assert "setup" == "setup"
-        
+
     def test_three(self):
         assert 2 == 2
 

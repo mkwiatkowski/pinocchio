@@ -92,7 +92,9 @@ import os
 import re
 import types
 import unittest
-from StringIO import StringIO
+
+from io import StringIO
+
 try:
     from unittest.runner import _WritelnDecorator #python 2.7
 except ImportError:
@@ -193,7 +195,7 @@ def testName(object, cleaner=underscored2spec, dflt=None):
         else:
             v = object.__name__
         return cleaner(v)
-        
+
 def camelcaseDescription(object):
     return inspect.getdoc(object) or testName(object, cleaner=camelcase2spec)
 
@@ -204,7 +206,8 @@ def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
-    return inspect.getdoc(test.method) or testName(test.method)
+    method = getattr(test.method, '_func', test.method)
+    return inspect.getdoc(method) or testName(method)
 
 def unittestMethodDescription(test):
     testMethod = getattr(test, test._testMethodName)
@@ -216,7 +219,7 @@ def noseFunctionDescription(test):
         if hasattr(test.test, 'description'):
             return test.test.description
         return "holds for %s" % ', '.join(map(str, test.arg))
-    return test.test.func_doc or underscored2spec(test.test.func_name)
+    return test.test.__doc__ or underscored2spec(test.test.__name__)
 
 # Different than other similar functions, this one returns a generator
 # of specifications.
@@ -243,13 +246,18 @@ def testDescription(test):
     ]
     return dispatch_on_type(supported_test_types, test.test)
 
+class _OldClass:
+    pass
+
+_OldClassType = type(_OldClass)
+
 def contextDescription(context):
     supported_context_types = [
         (types.ModuleType    , underscoredDescription),
         (types.FunctionType  , underscoredDescription),
         (doctest.DocTestCase , doctestContextDescription),
         # Handle both old and new style classes.
-        (types.ClassType     , camelcaseDescription),
+        (_OldClassType       , camelcaseDescription),
         (type                , camelcaseDescription),
     ]
     return dispatch_on_type(supported_context_types, context)
@@ -323,11 +331,11 @@ class SpecOutputStream(OutputStream):
 color_end = "\x1b[1;0m"
 colors    = dict(green="\x1b[1;32m", red="\x1b[1;31m", yellow="\x1b[1;33m")
 
-def in_color(color, text): 
+def in_color(color, text):
     """Colorize text, adding color to each line so that the color shows up
     correctly with the less -R as well as more and normal shell.
     """
-    return "".join( "%s%s%s" % (colors[color], line, color_end) 
+    return "".join( "%s%s%s" % (colors[color], line, color_end)
                                        for line in text.splitlines(True))
 
 ################################################################################
