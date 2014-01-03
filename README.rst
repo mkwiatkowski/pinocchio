@@ -2,27 +2,21 @@
 pinocchio -- extensions for the 'nose' unit testing framework
 =============================================================
 
-.. Contents::
-
-Introduction
-============
-
-pinocchio is a set of extensions to the nose_ unit testing framework
+Pinocchio is a set of extensions to the nose_ unit testing framework
 for Python.
 
-The current version of pinocchio is 0.1, available at
+You can get the most recent version from pypi:
 
-    http://darcs.idyll.org/~t/projects/pinocchio-0.1.tar.gz
+    https://pypi.python.org/pypi/pinocchio/
 
-You can always get the latest pinocchio distribution at ::
+You can install it via easy_install or pip ::
 
-    http://darcs.idyll.org/~t/projects/pinocchio-latest.tar.gz
+    easy_install pinocchio
+    pip install pinocchio
 
-You must install pinocchio with easy_install, e.g. ::
+Pinocchio only works with nose 0.9a1 and above. Pinocchio is compatible with both Python versions 2 and 3.
 
-    easy_install http://darcs.idyll.org/~t/projects/pinocchio-latest.tar.gz
-
-pinocchio only works with nose 0.9a1 and above.
+.. Contents::
 
 Extensions
 ==========
@@ -271,7 +265,7 @@ http://ivory.idyll.org/.
 
 The author of the spec plugin is Michal Kwiatkowski.  His homepage is
 at http://joker.linuxstuff.pl/ and his mail address is
-constant.beta@gmail.com.
+michal@trivas.pl.
 
-.. _nose: http://somethingaboutorange.com/mrl/projects/nose/
+.. _nose: https://nose.readthedocs.org/en/latest/
 .. _testdox: http://agiledox.sourceforge.net/
