@@ -1,7 +1,3 @@
-=============================================================
-pinocchio -- extensions for the 'nose' unit testing framework
-=============================================================
-
 Pinocchio is a set of extensions to the nose_ unit testing framework
 for Python.
 
