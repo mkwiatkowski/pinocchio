@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pinocchio',
-    version="0.3.1",
+    version="0.4",
     description = 'pinocchio plugins for the nose testing framework',
     author = 'C. Titus Brown and Michal Kwiatkowski',
     author_email = 'titus@idyll.org,michal@trivas.pl',
