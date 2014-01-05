@@ -92,8 +92,10 @@ import os
 import re
 import types
 import unittest
-
-from io import StringIO
+try:
+    from StringIO import StringIO
+except:
+    from io import StringIO
 
 try:
     from unittest.runner import _WritelnDecorator #python 2.7

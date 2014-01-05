@@ -13,7 +13,11 @@ import logging
 import os
 from nose.plugins.base import Plugin
 
-from io import StringIO as p_StringO
+
+try:
+    from StringIO import StringIO as p_StringO
+except:
+    from io import StringIO as p_StringO
 
 import traceback
 
