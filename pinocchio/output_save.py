@@ -34,18 +34,19 @@ def write_test_output(test, output, dirname, prefix=''):
 
 log = logging.getLogger(__name__)
 
-valid_chars = "-_.()%s%s" % (string.ascii_letters, string.digits)
-valid_chars = frozenset(valid_chars)
+# Based on code from http://stackoverflow.com/a/295146/28275
+valid_chars = frozenset("-_.()%s%s" % (string.ascii_letters, string.digits))
+def sanitize_filename(name):
+    return ''.join(c for c in name if c in valid_chars)
 
 def calc_testname(test):
+    # For errors at module-level nose passes a context instead of a test case.
     if isinstance(test, nose.suite.ContextSuite):
-        # In module-level setup/teardown, use module name.
         name = test.context.__name__
     else:
         name = str(test)
 
-    #sanitize a valid filename (based on code from http://stackoverflow.com/a/295146/28275)
-    return ''.join(c for c in name if c in valid_chars)
+    return sanitize_filename(name)
 
 def get_stdout():
     if isinstance(sys.stdout, p_StringO):
