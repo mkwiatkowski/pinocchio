@@ -12,7 +12,7 @@ import nose.case
 import logging
 import os
 from nose.plugins.base import Plugin
-
+import string
 
 try:
     from StringIO import StringIO as p_StringO
@@ -34,12 +34,18 @@ def write_test_output(test, output, dirname, prefix=''):
 
 log = logging.getLogger(__name__)
 
-def calc_testname(test):
-    name = str(test)
-    if ' ' in name:
-        name = name.split(' ')[1]
+valid_chars = "-_.()%s%s" % (string.ascii_letters, string.digits)
+valid_chars = frozenset(valid_chars)
 
-    return name
+def calc_testname(test):
+    if isinstance(test, nose.suite.ContextSuite):
+        # In module-level setup/teardown, use module name.
+        name = test.context.__name__
+    else:
+        name = str(test)
+
+    #sanitize a valid filename (based on code from http://stackoverflow.com/a/295146/28275)
+    return ''.join(c for c in name if c in valid_chars)
 
 def get_stdout():
     if isinstance(sys.stdout, p_StringO):
