@@ -1,3 +1,8 @@
 test_decorator.TestMeTwo: two
 test_decorator.TestMeTwo.test_me_three: three
 test_decorator.test_me_one: one
+# Attributes with values
+test_decorator.TestMeWithValues: runlevel=default
+test_decorator.TestMeWithValues.test_me_runlevel_quick: runlevel=quick
+test_decorator.TestMeWithValues.test_me_runlevel_express: runlevel=express
+test_decorator.TestMeWithValues.test_me_runlevel_extensive: runlevel=extensive

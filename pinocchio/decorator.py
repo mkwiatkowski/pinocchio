@@ -128,6 +128,9 @@ class Decorator(Plugin):
         """
         attribs = self.curtains.get(fullname, [])
         log.info('_attach_attributes: %s, %s' % (fullname, attribs,))
-
         for a in attribs:
-            obj.__dict__[a] = True
+            try:
+                key, val = a.split("=")
+            except ValueError:
+                key, val = (a, True)
+            obj.__dict__[key] = val
