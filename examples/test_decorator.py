@@ -22,3 +22,12 @@ class TestMeWithValues:
 
     def test_me_runlevel_extensive(self):
         print "Running test_me_runlevel_extensive"
+
+
+class TestMultipleAttr:
+    def test_one_and_two(self):
+        print "Running test_one_and_two"
+
+
+def fun_test_multiple_attr():
+    print "Running fun_test_multiple_attr"

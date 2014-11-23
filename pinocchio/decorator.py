@@ -73,13 +73,13 @@ class Decorator(Plugin):
                 continue
 
             # parse attributes...
-            name, attrib = line.split(':')
+            name, attribs = line.split(':')
             name = name.strip()
-            attrib = attrib.strip()
+            attribs = [a.strip() for a in attribs.split(',')]
 
             # ...and store 'em.
             l = curtains.get(name, [])
-            l.append(attrib)
+            l.extend(attribs)
             curtains[name] = l
 
         # save the attributes in 'self.curtains'.
