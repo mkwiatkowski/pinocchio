@@ -102,7 +102,7 @@ class Decorator(Plugin):
         wantMethod -- attach matching attributes to this method.
         """
         fullname = '%s.%s.%s' % (method.__module__,
-                                 method.__self__.__class__.__name__,
+                                 method.im_class.__name__,
                                  method.__name__)
 
         self._attach_attributes(fullname, method)
