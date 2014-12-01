@@ -45,6 +45,8 @@ def calc_testname(test):
         name = test.context.__name__
     else:
         name = str(test)
+    if ' ' in name:
+        name = name.split(' ')[1]
 
     return sanitize_filename(name)
 

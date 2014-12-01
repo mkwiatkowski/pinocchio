@@ -15,14 +15,9 @@ from nose.plugins.base import Plugin
 
 log = logging.getLogger(__name__)
 
-def sort_plugins_by_priority(a, b):
-    pa = getattr(a, 'call_priority', 100)
-    pb = getattr(b, 'call_priority', 100)
-
-    return cmp(pa, pb)
 
 class Decorator(Plugin):
-    call_priority=-100                  # put this plugin at a high priority.
+    score = 99999
 
     def __init__(self):
         Plugin.__init__(self)
@@ -63,17 +58,7 @@ class Decorator(Plugin):
     def begin(self):
         """
         Called before any tests are run.
-
-        The only trick here is that we have to mangle the order of
-        the plugins, because this plugin *must* be called before
-        any plugins that examine the attributes being set.  This is
-        done by sorting the plugins in-place.
         """
-
-        ### sort plugins by specified call_priority.  HACK!
-        self.conf.plugins.sort(sort_plugins_by_priority)
-
-        ### load in the specified attributes file.
 
         filename = self.decorator_file
 
@@ -88,13 +73,13 @@ class Decorator(Plugin):
                 continue
 
             # parse attributes...
-            name, attrib = line.split(':')
+            name, attribs = line.split(':')
             name = name.strip()
-            attrib = attrib.strip()
+            attribs = [a.strip() for a in attribs.split(',')]
 
             # ...and store 'em.
             l = curtains.get(name, [])
-            l.append(attrib)
+            l.extend(attribs)
             curtains[name] = l
 
         # save the attributes in 'self.curtains'.
@@ -116,9 +101,11 @@ class Decorator(Plugin):
         """
         wantMethod -- attach matching attributes to this method.
         """
-        fullname = '%s.%s.%s' % (method.__module__,
-                                 method.__self__.__class__.__name__,
-                                 method.__name__)
+        if hasattr(method, 'im_class'):
+            klass = method.im_class.__name__
+        else:
+            klass = method.__self__.__class__.__name__
+        fullname = '%s.%s.%s' % (method.__module__, klass, method.__name__)
 
         self._attach_attributes(fullname, method)
 
@@ -143,6 +130,12 @@ class Decorator(Plugin):
         """
         attribs = self.curtains.get(fullname, [])
         log.info('_attach_attributes: %s, %s' % (fullname, attribs,))
-
         for a in attribs:
-            obj.__dict__[a] = True
+            try:
+                key, val = a.split("=")
+            except ValueError:
+                key, val = (a, True)
+            try:
+                obj.__dict__[key] = val
+            except TypeError:
+                setattr(obj, key, val)
