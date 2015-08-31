@@ -178,11 +178,11 @@ class TestPluginSpecWithFileEnabled(SpecPluginTestCase):
     ]
 
 
-    def test_does_output_standard_output_if_spec_file_given(self):
+    def test_does_output_default_output_if_spec_file_given(self):
         for line in self.test_lines:
             self.failIfContainsInOutput(line)
 
-        self.assertIn("...", self.output, "Standard nosetests output shouldn't be silenced")
+        self.assertIn("...", self.output, "Default nosetests output shouldn't be silenced")
 
     def test_does_output_spec_output_to_file_if_spec_file_given(self):
         with open(self.args[1], 'r') as spec_file:
