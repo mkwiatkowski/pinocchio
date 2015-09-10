@@ -434,7 +434,7 @@ class Spec(Plugin):
 
     def finalize(self, result):
         if self.spec_file:
-            self.stream.off() #  Don't waste spec file with error descriptions
+            self.stream.off() #  Don't pollute spec file with error descriptions
             self.stream.on_stream.close()
         else:
             self.stream.on()
