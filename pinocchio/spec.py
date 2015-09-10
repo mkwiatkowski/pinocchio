@@ -81,7 +81,9 @@ specification.
 as green, while failed/error cases as red. Skipped and deprecated test
 cases will be shown in yellow. You need an ANSI terminal to use this.
 
-``--spec--doctests`` enables experimental support for doctests.
+``--spec-doctests`` enables experimental support for doctests.
+
+``--spec-file`` output specification to the file
 
 .. _testdox: http://agiledox.sourceforge.net/
 """
@@ -326,6 +328,7 @@ class SpecOutputStream(OutputStream):
         else:
             self.print_line(colorized("- %s" % spec))
 
+
 ################################################################################
 ## Color helpers.
 ################################################################################
@@ -361,6 +364,12 @@ class Spec(Plugin):
                           default=env.get('NOSE_SPEC_DOCTESTS'),
                           help="Include doctests in specifications "
                           "[NOSE_SPEC_DOCTESTS]")
+        parser.add_option('--spec-file', action='store',
+                          dest='spec_file',
+                          default=env.get('NOSE_SPEC_FILE'),
+                          help="Write specification to the file instead of stderr "
+                          "[NOSE_SPEC_FILE]")
+
 
     def configure(self, options, config):
         Plugin.configure(self, options, config)
@@ -374,6 +383,7 @@ class Spec(Plugin):
             self._colorize = lambda color: lambda text: text
 
         self.spec_doctests = options.spec_doctests
+        self.spec_file = options.spec_file
 
     def begin(self):
         self.current_context = None
@@ -384,6 +394,12 @@ class Spec(Plugin):
         else:
             on_stream = stream
         off_stream = open(os.devnull, 'w')
+
+        if self.spec_file:
+            # Swapping outputs so nose will write it's normal output to the stream
+            # and spec output to the file
+            off_stream, on_stream = on_stream, open(self.spec_file, 'w')
+
         self.stream = SpecOutputStream(on_stream, off_stream)
         return self.stream
 
@@ -417,7 +433,12 @@ class Spec(Plugin):
         self.stream.capture()
 
     def finalize(self, result):
-        self.stream.on()
+        if self.spec_file:
+            self.stream.off() #  Don't waste spec file with error descriptions
+            self.stream.on_stream.close()
+        else:
+            self.stream.on()
+
         # Print test run summary.
         self.stream.writeln(self.stream.get_captured())
 

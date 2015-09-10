@@ -233,6 +233,9 @@ cases will be shown in yellow. You need an ANSI terminal to use this.
 
 ``--spec-doctests`` enables experimental support for doctests.
 
+``--spec-file=SPEC_FILE`` outputs specification to the separate file instead
+of default nose stream. When used - nose reporter is not replaced.
+
 Examples
 ~~~~~~~~
 

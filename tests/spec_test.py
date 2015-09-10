@@ -1,9 +1,11 @@
 """Unit tests for Spec plugin.
 """
 
+import os
 import textwrap
 import unittest
 import nose
+import tempfile
 from nose.plugins import Plugin, PluginTester
 from pinocchio.spec import Spec, in_color
 
@@ -129,6 +131,7 @@ class TestPluginSpecWithDoctests(SpecPluginTestCase):
     def test_builds_specifications_for_doctests(self):
         self.assertContainsInOutput(self.expected_test_doctests_output)
 
+
 class TestPluginSpecWithDoctestsButDisabled(SpecPluginTestCase):
     activate  = '--with-spec'
     args      = ['--with-doctest', '--doctest-tests'] # no --spec-doctests option
@@ -157,3 +160,37 @@ class TestColor(object):
                        \x1b[1;0m\x1b[1;32mThat is on multiple lines
                        \x1b[1;0m\x1b[1;32mthree lines to be exact.\x1b[1;0m''')
         assert in_color('green', self.multi_line) == expected
+
+
+class TestPluginSpecWithFileEnabled(SpecPluginTestCase):
+    activate  = '--with-spec'
+    args      = ['--spec-file', tempfile.NamedTemporaryFile(delete=False).name]
+    plugins   = [Spec()]
+    suitename = 'foobar'
+
+    test_lines = [
+        "Baz bar",
+        "- does this and that",
+
+        "Foobar",
+        "- can be automatically documented",
+        "- is a singleton"
+    ]
+
+
+    def test_does_output_default_output_if_spec_file_given(self):
+        for line in self.test_lines:
+            self.failIfContainsInOutput(line)
+
+        self.assertIn("...", self.output, "Default nosetests output shouldn't be silenced")
+
+    def test_does_output_spec_output_to_file_if_spec_file_given(self):
+        with open(self.args[1], 'r') as spec_file:
+            file_content = spec_file.read()
+
+        for line in self.test_lines:
+            self.assertIn(line, file_content)
+
+    @classmethod
+    def tearDownClass(cls):
+        os.unlink(cls.args[1])
