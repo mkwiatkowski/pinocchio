@@ -98,9 +98,15 @@ class Stopwatch(Plugin):
         """
         Do we want to run this method?  See _should_run.
         """
-        fullname = '%s.%s.%s' % (method.__module__,
-                                 method.__self__.__class__.__name__,
-                                 method.__name__)
+        # Use the class that asked for the unbound method
+        if hasattr(method, 'im_class'):
+            fullname = '%s.%s.%s' % (method.__module__,
+                                     method.im_class.__name__,
+                                     method.__name__)
+        else:
+            fullname = '%s.%s.%s' % (method.__module__,
+                                     method.__self__.__class__.__name__,
+                                     method.__name__)
 
         return self._should_run(fullname)
 
