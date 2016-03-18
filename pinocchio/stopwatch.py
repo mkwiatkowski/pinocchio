@@ -65,7 +65,7 @@ class Stopwatch(Plugin):
         calculates which tests should NOT be run.
         """
         try:
-            self.times = load(open(self.stopwatch_file))
+            self.times = load(open(self.stopwatch_file, 'rb'))
         except (IOError, EOFError):
             self.times = {}
 
@@ -83,7 +83,7 @@ class Stopwatch(Plugin):
         open fails.
         """
         try:
-            fp = open(self.stopwatch_file, 'w')
+            fp = open(self.stopwatch_file, 'wb')
         except (IOError, OSError):
             t = int(time.time())
             filename = '/tmp/nose-stopwatch-%s.pickle' % (t,)
@@ -100,11 +100,11 @@ class Stopwatch(Plugin):
         """
         # Use the class that asked for the unbound method
         if hasattr(method, 'im_class'):
-            fullname = '%s.%s.%s' % (method.__module__,
+            fullname = '%s.%s.%s' % (method.im_class.__module__,
                                      method.im_class.__name__,
                                      method.__name__)
         else:
-            fullname = '%s.%s.%s' % (method.__module__,
+            fullname = '%s.%s.%s' % (method.__self__.__class__.__module__,
                                      method.__self__.__class__.__name__,
                                      method.__name__)
 
