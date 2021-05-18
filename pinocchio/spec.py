@@ -89,7 +89,6 @@ cases will be shown in yellow. You need an ANSI terminal to use this.
 """
 
 import doctest
-import inspect
 import os
 import re
 import types
@@ -201,17 +200,17 @@ def testName(object, cleaner=underscored2spec, dflt=None):
         return cleaner(v)
 
 def camelcaseDescription(object):
-    return inspect.getdoc(object) or testName(object, cleaner=camelcase2spec)
+    return object.__doc__ or testName(object, cleaner=camelcase2spec)
 
 def underscoredDescription(object):
-    return inspect.getdoc(object) or testName(object).capitalize()
+    return object.__doc__ or testName(object).capitalize()
 
 def doctestContextDescription(doctest):
     return doctest._dt_test.name
 
 def noseMethodDescription(test):
     method = getattr(test.method, '_func', test.method)
-    return inspect.getdoc(method) or testName(method)
+    return method.__doc__ or testName(method)
 
 def unittestMethodDescription(test):
     testMethod = getattr(test, test._testMethodName)
