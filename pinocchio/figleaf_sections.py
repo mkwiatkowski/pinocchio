@@ -7,12 +7,43 @@ of code execution.
 """
 
 DEFAULT_COVERAGE_FILE='.figleaf_sections'
-import pkg_resources
+
+
+def _figleaf_installed():
+    """Return True if figleaf>=0.6.1 is available.
+
+    Uses importlib.metadata when available (Python 3.8+), falling back to
+    pkg_resources for older environments. Avoids importing pkg_resources
+    unconditionally, since recent setuptools (>=81) no longer ship it.
+    """
+    try:
+        from importlib.metadata import distribution, PackageNotFoundError
+    except ImportError:
+        try:
+            from pkg_resources import get_distribution, DistributionNotFound
+        except ImportError:
+            return False
+        try:
+            get_distribution('figleaf>=0.6.1')
+        except DistributionNotFound:
+            return False
+    else:
+        try:
+            dist = distribution('figleaf')
+        except PackageNotFoundError:
+            return False
+        version = tuple(int(p) for p in dist.version.split('.') if p.isdigit())
+        if version < (0, 6, 1):
+            return False
+    return True
+
 
 try:
-    pkg_resources.require('figleaf>=0.6.1')
-    import figleaf
-except (ImportError, pkg_resources.DistributionNotFound):
+    if _figleaf_installed():
+        import figleaf
+    else:
+        figleaf = None
+except ImportError:
     figleaf = None
 
 import sys
