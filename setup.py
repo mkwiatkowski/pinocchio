@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pinocchio',
-    version="0.4.3",
+    version="0.5.1",
     description = 'pinocchio plugins for the nose testing framework',
     author = 'C. Titus Brown and Michal Kwiatkowski',
     author_email = 'titus@idyll.org,michal@trivas.pl',
@@ -17,12 +17,12 @@ runtime, doing moderately sophisticated code coverage analysis
 of your unit tests, and making your test descriptions look like
 specifications.
 """,
+    long_description_content_type='text/markdown',
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
         "Environment :: Plugins",
         "Topic :: Software Development :: Testing"

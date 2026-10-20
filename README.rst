@@ -264,7 +264,7 @@ titus@idyll.org, or check out his main site at
 http://ivory.idyll.org/.
 
 The author of the spec plugin is Michal Kwiatkowski.  His homepage is
-at http://joker.linuxstuff.pl/ and his mail address is
+at https://trivas.pl/ and his email address is
 michal@trivas.pl.
 
 .. _nose: https://nose.readthedocs.org/en/latest/
